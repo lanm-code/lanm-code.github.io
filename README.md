@@ -2,6 +2,9 @@
 
 个人简历主页,部署在 Netlify(通过 GitHub 自动部署)。
 
+- 网站地址:https://neon-seahorse-cccad9.netlify.app
+- 仓库地址:https://github.com/lanm-code/symmetrical-octo-palm-tree
+
 ## 文件说明
 
 - `index.html` —— 网页主文件,头像和证书图片已内嵌(base64),单文件即可正常显示
