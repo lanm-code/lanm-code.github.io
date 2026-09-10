@@ -492,6 +492,90 @@ body:has(.panel.active:not([data-panel="home"])) .iot-resume-background svg {opa
 @media(max-width:640px){.iot-resume-background svg{width:490px;right:-170px;top:175px;}}
 @media print{#iot-water-surface{display:none!important;}}
 
+/* A / 水光线性：统一图标、轻盈胶囊和柔性反馈。 */
+.ui-icon {width:22px;height:22px;display:inline-block;vertical-align:middle;flex:none;fill:none;stroke:currentColor;stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round;}
+.nav .brand-mark {box-shadow:none;}
+.nav {background:color-mix(in srgb,var(--bg) 89%,transparent);}
+.tabs {position:relative;isolation:isolate;gap:3px;padding:5px;}
+.tab {display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 13px;position:relative;z-index:1;flex-shrink:0;transition:color .2s,transform .28s cubic-bezier(.2,.9,.2,1.3);}
+.tab .ui-icon {width:22px;height:22px;transition:transform .3s cubic-bezier(.2,.9,.2,1.35);}
+.tabs .tab.active {background:transparent;box-shadow:none;color:var(--accent);}
+.tab-indicator {position:absolute;top:5px;left:0;height:calc(100% - 10px);border-radius:999px;background:var(--card);border:1px solid color-mix(in srgb,var(--line) 85%,transparent);box-shadow:0 3px 10px -7px rgba(38,91,120,.4);z-index:0;pointer-events:none;transition:transform .38s cubic-bezier(.22,.9,.24,1.05),width .38s cubic-bezier(.22,.9,.24,1.05);}
+.tab:active .ui-icon {transform:scale(.87);}
+.tab.active .ui-icon {stroke-width:2.6;}
+.icon-btn {display:grid;place-items:center;}
+.btn {display:inline-flex;align-items:center;justify-content:center;gap:7px;}
+.btn .ui-icon {width:18px;height:18px;}
+.hl-icon .ui-icon,.c-icon .ui-icon {width:26px;height:26px;}
+.h3-emoji {display:inline-flex;color:var(--accent);}
+.cert-badge .ui-icon {width:36px;height:36px;}
+.hl-icon,.c-icon {color:var(--brand1);}
+.card,.hl-card,.contact-card {border-radius:22px;box-shadow:0 8px 26px -19px rgba(30,69,93,.3),inset 0 1px 0 color-mix(in srgb,var(--card) 85%,white);}
+.hl-card,.contact-card {transition:transform .38s cubic-bezier(.2,.8,.2,1.2),box-shadow .3s,border-color .3s;}
+.hl-card:hover,.contact-card:hover {transform:none;}
+@media(hover:hover) and (pointer:fine){
+ a.contact-card:hover,.hl-card:hover {transform:translateY(-3px);}
+ .tab:hover .ui-icon {transform:translateY(-1px);}
+}
+a.contact-card:active,.btn:active,.icon-btn:active {transform:scale(.975);}
+.card h3,.hl-card h3,.contact-card h4 {letter-spacing:.1px;}
+.learning-intro {font-size:14px;line-height:1.85;color:var(--muted);margin:-4px 0 22px;max-width:770px;}
+.learning-item {padding:18px 0;border-bottom:1px solid var(--line);}
+.learning-item:last-child {padding-bottom:0;border-bottom:0;}
+.learning-top {display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.learning-top h4 {font-size:15px;color:var(--ink);}
+.learning-state {font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;color:var(--accent);background:color-mix(in srgb,var(--accent) 9%,var(--card));white-space:nowrap;}
+.learning-state.planned {color:var(--muted);background:var(--bg-soft);}
+.learning-item p,.practice-item p {font-size:14px;color:var(--muted);line-height:1.85;margin-top:9px;}
+.learning-next {display:flex;align-items:baseline;gap:9px;font-size:12.5px;color:var(--muted);margin-top:8px;}
+.learning-next span {color:var(--brand1);font-weight:600;flex:none;}
+.practice-item {margin-top:23px;padding-left:16px;border-left:2px solid color-mix(in srgb,var(--accent) 42%,var(--line));}
+.practice-item h4 {font-size:14px;}
+.learning-note {margin-top:22px;padding:14px 16px;border-radius:14px;background:color-mix(in srgb,var(--brand2) 6%,var(--card));color:var(--muted);font-size:13px;line-height:1.8;}
+.page-status {display:none;}
+main.wrap {position:relative;}
+.panel.swipe-peek {display:block;position:absolute;visibility:visible;pointer-events:none;animation:none;}
+.panel.swipe-current {animation:none;position:relative;will-change:transform;}
+.swipe-running .panel {transition:none;}
+.screen-reader-only {position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+@media(max-width:900px){
+ .nav-inner {gap:8px;}
+ .tabs {order:3;width:100%;margin:4px 0 0;overflow-x:auto;scrollbar-width:none;}
+ main.wrap {padding-top:152px;touch-action:pan-y pinch-zoom;}
+ .tab {gap:4px;padding:9px 11px;font-size:12px;flex:1 0 auto;}
+ .tab .ui-icon {width:19px;height:19px;}
+ .page-status {display:flex;align-items:center;gap:8px;margin:0 0 10px;font-size:11px;color:var(--muted);}
+ .page-status .ui-icon {width:14px;height:14px;}
+ .page-status-count {font-variant-numeric:tabular-nums;margin-left:auto;}
+ .panel>.hero {padding-top:20px;}
+}
+@media(max-width:480px){
+ .nav-inner {padding:10px 14px;}
+ .brand {font-size:17px;gap:6px;}
+ .brand small {display:none;}
+ .nav-actions {margin-left:auto;gap:6px;}
+ .nav-actions .btn {font-size:12px;padding:8px 12px;}
+ .tabs {gap:0;padding:4px;}
+ .tab {padding:8px 4px;gap:4px;font-size:11px;flex-direction:column;min-width:46px;}
+ .tab-indicator {top:4px;height:calc(100% - 8px);border-radius:18px;}
+ .card {padding:20px;}
+ .learning-top {gap:8px;}
+ .learning-intro {font-size:13px;}
+}
+@media(prefers-reduced-motion:reduce){
+ .tab-indicator,.tab,.tab .ui-icon,.hl-card,.contact-card,.btn {transition:none!important;}
+ .panel.active {animation:none!important;}
+}
+@media print{
+ .page-status,.tab-indicator {display:none!important;}
+ main.wrap {padding-top:0!important;height:auto!important;}
+ .panel {transform:none!important;position:static!important;width:auto!important;}
+ body.print-all .panel {display:block!important;}
+ .learning-item,.practice-item {break-inside:avoid;}
+}
+
+.swipe-running {user-select:none;-webkit-user-select:none;}
+
 </style>
 </head>
 <body>
@@ -529,25 +613,27 @@ body:has(.panel.active:not([data-panel="home"])) .iot-resume-background svg {opa
     <div class="brand">
       <span class="brand-mark">兰</span>兰云皓<small>· 个人简历</small>
     </div>
-    <div class="tabs" id="tabs" role="tablist" aria-label="导航页签">
-      <button class="tab active" data-tab="home" role="tab" id="tab-home" aria-controls="panel-home" aria-selected="true">🏠 概览</button>
-      <button class="tab" data-tab="skills" role="tab" id="tab-skills" aria-controls="panel-skills" aria-selected="false">🧠 技能</button>
-      <button class="tab" data-tab="story" role="tab" id="tab-story" aria-controls="panel-story" aria-selected="false">🚀 经历</button>
-      <button class="tab" data-tab="works" role="tab" id="tab-works" aria-controls="panel-works" aria-selected="false">🎮 作品</button>
-      <button class="tab" data-tab="cert" role="tab" id="tab-cert" aria-controls="panel-cert" aria-selected="false">🏅 证书</button>
-      <button class="tab" data-tab="contact" role="tab" id="tab-contact" aria-controls="panel-contact" aria-selected="false">📮 联系</button>
+    <div class="tabs" id="tabs" role="tablist" aria-label="简历页面" aria-label="导航页签">
+      <button class="tab active" data-tab="home" role="tab" id="tab-home" aria-controls="panel-home" aria-selected="true"><svg class="ui-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><rect x="7" y="9" width="34" height="29" rx="7"/><circle cx="18" cy="20" r="4"/><path d="M12 31Q18 25 24 31M29 18H35M29 24H35M29 30H33"/></svg><span>概览</span></button>
+      <button class="tab" data-tab="skills" role="tab" id="tab-skills" aria-controls="panel-skills" aria-selected="false"><svg class="ui-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M24 13Q14 8 6 13V36Q15 31 24 36Q33 31 42 36V13Q33 8 24 13ZM24 13V36"/><path d="M30 19H35V25H39"/><circle cx="39" cy="27" r="2"/></svg><span>学习</span></button>
+      <button class="tab" data-tab="story" role="tab" id="tab-story" aria-controls="panel-story" aria-selected="false"><svg class="ui-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M13 37V29Q13 24 23 24H29Q35 24 35 17V11"/><circle cx="13" cy="38" r="4"/><circle cx="35" cy="10" r="4"/><circle cx="24" cy="24" r="3"/></svg><span>经历</span></button>
+      <button class="tab" data-tab="works" role="tab" id="tab-works" aria-controls="panel-works" aria-selected="false"><svg class="ui-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><rect x="5" y="9" width="38" height="31" rx="7"/><path d="M6 18H42M18 24L13 29L18 34M30 24L35 29L30 34M26 23L22 35"/><path d="M12 14H13M17 14H18"/></svg><span>作品</span></button>
+      <button class="tab" data-tab="cert" role="tab" id="tab-cert" aria-controls="panel-cert" aria-selected="false"><svg class="ui-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M29 39H10V8H37V24M17 16H30M17 22H26"/><circle cx="34" cy="31" r="7"/><path d="M29 36L28 44L34 41L40 44L39 36"/></svg><span>证书</span></button>
+      <button class="tab" data-tab="contact" role="tab" id="tab-contact" aria-controls="panel-contact" aria-selected="false"><svg class="ui-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><rect x="5" y="11" width="38" height="28" rx="8"/><path d="M7 15L24 28L41 15M7 36L18 26M41 36L30 26"/></svg><span>联系</span></button>
     </div>
     <div class="nav-actions">
-      <button class="icon-btn" id="themeBtn" title="切换深浅模式">🌓</button>
-      <button class="btn btn-primary" id="printBtn" title="一键打印 / 导出 PDF">🖨 打印 · PDF</button>
+      <button class="icon-btn" id="themeBtn" title="切换深浅模式"><svg class="ui-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M27 7A17 17 0 1 0 41 30A15 15 0 0 1 27 7Z"/></svg></button>
+      <button class="btn btn-primary" id="printBtn" title="一键打印 / 导出 PDF"><svg class="ui-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M13 17V5H35V17M13 35H7V17H41V35H35M13 29H35V44H13Z"/><path d="M33 23H35"/></svg><span>打印 · PDF</span></button>
     </div>
   </div>
 </nav>
 
 <main class="wrap">
+  <div class="page-status" aria-hidden="true"><span>左右滑动，探索更多</span><span class="page-status-count">1 / 6</span></div>
+  <p id="pageAnnouncement" class="screen-reader-only" aria-live="polite" aria-atomic="true"></p>
 
   <!-- ============ 概览 ============ -->
-  <section class="panel active" data-panel="home" id="panel-home">
+  <section class="panel active" data-panel="home" id="panel-home" role="tabpanel" aria-labelledby="tab-home">
     <div class="hero">
       <div class="avatar-wrap">
         <div class="avatar-ring" aria-hidden="true"></div>
@@ -573,9 +659,9 @@ body:has(.panel.active:not([data-panel="home"])) .iot-resume-background svg {opa
           <span class="chip">🏸 羽毛球</span>
         </div>
         <div class="hero-cta">
-          <button class="btn btn-primary" onclick="switchTab('cert')">🏅 查看证书</button>
-          <button class="btn" onclick="window.print()">🖨 下载简历 PDF</button>
-          <a class="btn btn-ghost" href="https://github.com/lanm-code" target="_blank" rel="noopener">💻 GitHub 主页 ↗</a>
+          <button class="btn btn-primary" onclick="switchTab('cert')"><svg class="ui-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M29 39H10V8H37V24M17 16H30M17 22H26"/><circle cx="34" cy="31" r="7"/><path d="M29 36L28 44L34 41L40 44L39 36"/></svg><span>查看证书</span></button>
+          <button class="btn" onclick="window.print()"><svg class="ui-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M13 17V5H35V17M13 35H7V17H41V35H35M13 29H35V44H13Z"/><path d="M33 23H35"/></svg><span>下载简历 PDF</span></button>
+          <a class="btn btn-ghost" href="https://github.com/lanm-code" target="_blank" rel="noopener"><svg class="ui-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><rect x="5" y="9" width="38" height="31" rx="7"/><path d="M6 18H42M18 24L13 29L18 34M30 24L35 29L30 34M26 23L22 35"/><path d="M12 14H13M17 14H18"/></svg><span>GitHub 主页 ↗</span></a>
         </div>
       </div>
     </div>
@@ -583,22 +669,22 @@ body:has(.panel.active:not([data-panel="home"])) .iot-resume-background svg {opa
     <h2 class="sec-head">核心亮点<span class="sec-note">30 秒了解我</span></h2>
     <div class="grid-4">
       <div class="hl-card">
-        <div class="hl-icon">🌱</div>
+        <div class="hl-icon"><svg class="ui-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M9 35C-1 13 24 6 40 7C42 29 32 43 14 37M9 43L30 20"/></svg></div>
         <h3>行动派</h3>
         <p>先跑起来再持续迭代,小步快跑、及时复盘,把想法真正落地。</p>
       </div>
       <div class="hl-card">
-        <div class="hl-icon">🧠</div>
+        <div class="hl-icon"><svg class="ui-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M24 13Q14 8 6 13V36Q15 31 24 36Q33 31 42 36V13Q33 8 24 13ZM24 13V36"/><path d="M30 19H35V25H39"/><circle cx="39" cy="27" r="2"/></svg></div>
         <h3>快速自学</h3>
         <p>课程 + 项目双驱动,从零自学 C、Python 与 Git 工作流并持续打卡。</p>
       </div>
       <div class="hl-card">
-        <div class="hl-icon">🤖</div>
+        <div class="hl-icon"><svg class="ui-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><rect x="12" y="12" width="24" height="24" rx="5"/><rect x="19" y="19" width="10" height="10" rx="2"/><path d="M18 5V12M30 5V12M18 36V43M30 36V43M5 18H12M5 30H12M36 18H43M36 30H43"/></svg></div>
         <h3>AI 工具链</h3>
         <p>熟练使用 AI 编程辅助工具,沉淀个人提示词与自动化工作流。</p>
       </div>
       <div class="hl-card">
-        <div class="hl-icon">🏸</div>
+        <div class="hl-icon"><svg class="ui-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><circle cx="24" cy="24" r="15"/><circle cx="24" cy="24" r="6"/><path d="M24 3V9M24 39V45M3 24H9M39 24H45"/></svg></div>
         <h3>专注与坚持</h3>
         <p>羽毛球长期爱好者,基本功与体能训练养成日常习惯,锤炼专注。</p>
       </div>
@@ -606,56 +692,45 @@ body:has(.panel.active:not([data-panel="home"])) .iot-resume-background svg {opa
   </section>
 
   <!-- ============ 技能 ============ -->
-  <section class="panel" data-panel="skills" id="panel-skills">
-    <h2 class="sec-head">技能雷达<span class="sec-note">学习进度为个人自评</span></h2>
+  <section class="panel" data-panel="skills" id="panel-skills" role="tabpanel" aria-labelledby="tab-skills">
+    <h2 class="sec-head">学习与实践<span class="sec-note">从基础开始，在实践中积累</span></h2>
+    <p class="learning-intro">作为物联网工程大一新生，我正在建立编程与开发工具的基础。从小练习和真实项目开始，把每一次尝试变成下一步的积累。</p>
     <div class="grid-2">
       <div class="card">
-        <h3><span class="h3-emoji">💻</span> 编程技能</h3>
-        <div class="skill">
-          <div class="skill-top"><span>Python</span><span class="lv">学习中 · 65%</span></div>
-          <div class="bar"><div class="bar-fill" data-w="65%"></div></div>
+        <h3><svg class="ui-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M24 13Q14 8 6 13V36Q15 31 24 36Q33 31 42 36V13Q33 8 24 13ZM24 13V36"/><path d="M30 19H35V25H39"/><circle cx="39" cy="27" r="2"/></svg> 我正在学习</h3>
+        <div class="learning-item">
+          <div class="learning-top"><h4>C 语言</h4><span class="learning-state">正在学习基础</span></div>
+          <p>从基础语法和小练习出发，逐步理解程序的执行过程，练习把问题拆成清晰的步骤。</p>
+          <div class="learning-next"><span>下一步</span>持续练习，记录并复盘遇到的错误。</div>
         </div>
-        <div class="skill">
-          <div class="skill-top"><span>C 语言</span><span class="lv">打卡中 · 60%</span></div>
-          <div class="bar"><div class="bar-fill" data-w="60%"></div></div>
+        <div class="learning-item">
+          <div class="learning-top"><h4>Python</h4><span class="learning-state">结合项目学习</span></div>
+          <p>结合已有的游戏项目继续学习，逐步理解代码结构，练习调试与修改功能。</p>
+          <div class="learning-next"><span>下一步</span>从小功能入手，说明修改的原因和运行结果。</div>
         </div>
-        <div class="skill">
-          <div class="skill-top"><span>Git / GitHub</span><span class="lv">实践中 · 60%</span></div>
-          <div class="bar"><div class="bar-fill" data-w="60%"></div></div>
+        <div class="learning-item">
+          <div class="learning-top"><h4>Git / GitHub</h4><span class="learning-state">在使用中学习</span></div>
+          <p>通过代码仓库和个人网页接触版本管理，在实际使用中熟悉保存、更新与发布的流程。</p>
+          <div class="learning-next"><span>下一步</span>规范提交说明，学习查看和理解版本差异。</div>
         </div>
-        <div class="skill">
-          <div class="skill-top"><span>Linux 基础</span><span class="lv">入门 · 45%</span></div>
-          <div class="bar"><div class="bar-fill" data-w="45%"></div></div>
+        <div class="learning-item">
+          <div class="learning-top"><h4>Linux 与物联网基础</h4><span class="learning-state planned">后续学习方向</span></div>
+          <p>计划结合大学课程，逐步接触命令行、设备通信和物联网相关基础知识。</p>
+          <div class="learning-next"><span>下一步</span>先完成基础练习，再尝试简单的综合实践。</div>
         </div>
       </div>
       <div class="card">
-        <h3><span class="h3-emoji">🧰</span> 工具与 AI 工作流</h3>
-        <p style="font-size:13.5px;color:var(--muted);margin-top:8px;">编程与效率工具</p>
-        <div class="pills">
-          <span class="pill">AI 辅助编程</span>
-          <span class="pill">Git / GitHub</span>
-          <span class="pill">VS Code</span>
-          <span class="pill">Python 脚本</span>
-          <span class="pill">C 控制台程序</span>
-        </div>
-        <p style="font-size:13.5px;color:var(--muted);margin-top:18px;">提示词与自动化</p>
-        <div class="pills">
-          <span class="pill">意图识别</span>
-          <span class="pill">智能问答逻辑</span>
-          <span class="pill">个人 Prompt 库</span>
-        </div>
-        <p style="font-size:13.5px;color:var(--muted);margin-top:18px;">兴趣与特长</p>
-        <div class="pills">
-          <span class="pill emoji">🏸 羽毛球(擅长)</span>
-          <span class="pill emoji">📊 数据标注与智能客服训练</span>
-          <span class="pill emoji">⚡ 快速自学与复盘</span>
-        </div>
+        <h3><svg class="ui-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><rect x="5" y="9" width="38" height="31" rx="7"/><path d="M6 18H42M18 24L13 29L18 34M30 24L35 29L30 34M26 23L22 35"/><path d="M12 14H13M17 14H18"/></svg> 我如何实践</h3>
+        <div class="practice-item"><h4>用真实项目带动学习</h4><p>已有《钢铁前线》游戏和个人简历网页作为实践载体。接下来会继续从中选取小问题，练习理解、修改和验证。</p><button class="btn" style="margin-top:12px" onclick="switchTab('works')">查看项目 <svg class="ui-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M13 35L35 13M15 13H35V33"/></svg></button></div>
+        <div class="practice-item"><h4>在 AI 协助下，补上自己的理解</h4><p>使用 AI 辅助编程与网页制作，同时提醒自己：代码能够运行，还需要进一步理解它为什么这样工作。</p></div>
+        <div class="practice-item"><h4>把下一步变得具体</h4><p>小步练习、记录问题、尝试修正。希望逐步做到能够解释关键代码，并独立完成更多小功能。</p></div>
+        <div class="learning-note">持续学习中：跟随课程与实践，逐步补齐基础，留下能回看、能解释的学习记录。</div>
       </div>
     </div>
   </section>
 
   <!-- ============ 经历 ============ -->
-  <section class="panel" data-panel="story" id="panel-story">
+  <section class="panel" data-panel="story" id="panel-story" role="tabpanel" aria-labelledby="tab-story">
     <h2 class="sec-head">成长时间线<span class="sec-note">每一步都在迭代</span></h2>
     <div class="card">
       <div class="timeline">
@@ -692,13 +767,13 @@ body:has(.panel.active:not([data-panel="home"])) .iot-resume-background svg {opa
   </section>
 
   <!-- ============ 作品 ============ -->
-  <section class="panel" data-panel="works" id="panel-works">
+  <section class="panel" data-panel="works" id="panel-works" role="tabpanel" aria-labelledby="tab-works">
     <h2 class="sec-head">项目作品<span class="sec-note">从想法到可玩 · 完整落地</span></h2>
 
     <div class="card">
       <div class="work-title-row">
         <div style="max-width:780px;">
-          <h3><span class="h3-emoji">🎮</span> 钢铁前线</h3>
+          <h3><span class="h3-emoji"><svg class="ui-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><rect x="5" y="9" width="38" height="31" rx="7"/><path d="M6 18H42M18 24L13 29L18 34M30 24L35 29L30 34M26 23L22 35"/><path d="M12 14H13M17 14H18"/></svg></span> 钢铁前线</h3>
           <p style="font-size:13.5px;color:var(--muted);margin-top:6px;">
             独立开发的俯视角坦克 Roguelike 射击游戏:30 关剧情闯关 + 无尽生存 + Boss Rush 三种模式,
             五位 Boss(篮球霸王 / 旺仔小乔 / 野生狗奶 / 袋鼠快递王 / 华强瓜王)、26 项技能三选一成长、
@@ -725,23 +800,23 @@ body:has(.panel.active:not([data-panel="home"])) .iot-resume-background svg {opa
           免安装、开箱即玩:下载解压后双击「钢铁前线.exe」即可进入游戏,
           无需安装 Python 或任何环境(exe 需与素材库文件夹保持同级)。
         </p>
-        <a class="btn btn-primary" href="钢铁前线_游戏包.zip" download>⬇ 下载游戏包(38.3 MB)</a>
+        <a class="btn btn-primary" href="钢铁前线_游戏包.zip" download><svg class="ui-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M24 5V31M14 21L24 31L34 21M7 32V42H41V32"/></svg><span>下载游戏包(38.3 MB)</span></a>
       </div>
       <div class="card">
         <h4>📄 运行说明</h4>
         <p style="font-size:13px;color:var(--muted);margin:8px 0 14px;">
           一页看懂:解压启动、操作按键、游戏模式与常见问题,随下随玩。
         </p>
-        <a class="btn" href="钢铁前线_运行说明.txt" download>⬇ 点击下载运行说明</a>
+        <a class="btn" href="钢铁前线_运行说明.txt" download><svg class="ui-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M24 5V31M14 21L24 31L34 21M7 32V42H41V32"/></svg><span>点击下载运行说明</span></a>
       </div>
     </div>
   </section>
 
   <!-- ============ 证书 ============ -->
-  <section class="panel" data-panel="cert" id="panel-cert">
+  <section class="panel" data-panel="cert" id="panel-cert" role="tabpanel" aria-labelledby="tab-cert">
     <h2 class="sec-head">认证证书</h2>
     <div class="card cert-card">
-      <div class="cert-badge">🏅</div>
+      <div class="cert-badge"><svg class="ui-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M29 39H10V8H37V24M17 16H30M17 22H26"/><circle cx="34" cy="31" r="7"/><path d="M29 36L28 44L34 41L40 44L39 36"/></svg></div>
       <div class="cert-info">
         <h4>达摩院智能客服「人工智能训练师(高级)」认证</h4>
         <p>达摩院-机器智能技术事业部 / 阿里云智能服务事业部 · 2026.08.31 获证 · 高级课程培训并认证合格</p>
@@ -754,7 +829,7 @@ body:has(.panel.active:not([data-panel="home"])) .iot-resume-background svg {opa
     </div>
 
     <div class="card cert-card" style="margin-top:14px;">
-      <div class="cert-badge">🏅</div>
+      <div class="cert-badge"><svg class="ui-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M29 39H10V8H37V24M17 16H30M17 22H26"/><circle cx="34" cy="31" r="7"/><path d="M29 36L28 44L34 41L40 44L39 36"/></svg></div>
       <div class="cert-info">
         <h4>达摩院智能客服「人工智能训练师(初级)」认证</h4>
         <p>阿里云智能服务事业部 · 2026.08.24 获证 · 系统掌握意图识别与智能问答</p>
@@ -771,21 +846,21 @@ body:has(.panel.active:not([data-panel="home"])) .iot-resume-background svg {opa
   </section>
 
   <!-- ============ 联系 ============ -->
-  <section class="panel" data-panel="contact" id="panel-contact">
+  <section class="panel" data-panel="contact" id="panel-contact" role="tabpanel" aria-labelledby="tab-contact">
     <h2 class="sec-head">联系方式<span class="sec-note">期待与你交流</span></h2>
     <div class="grid-3">
       <a class="contact-card" href="javascript:void(0)" onclick="copyEmail()" title="点击复制邮箱">
-        <div class="c-icon">📧</div>
+        <div class="c-icon"><svg class="ui-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><rect x="5" y="11" width="38" height="28" rx="8"/><path d="M7 15L24 28L41 15M7 36L18 26M41 36L30 26"/></svg></div>
         <h4>电子邮箱</h4>
         <p>56871254@qq.com<br>点击卡片即可复制</p>
       </a>
       <a class="contact-card" href="https://github.com/lanm-code" target="_blank" rel="noopener">
-        <div class="c-icon">💻</div>
+        <div class="c-icon"><svg class="ui-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><rect x="5" y="9" width="38" height="31" rx="7"/><path d="M6 18H42M18 24L13 29L18 34M30 24L35 29L30 34M26 23L22 35"/><path d="M12 14H13M17 14H18"/></svg></div>
         <h4>GitHub</h4>
         <p>github.com/lanm-code<br>代码与学习记录 ↗</p>
       </a>
       <div class="contact-card">
-        <div class="c-icon">📍</div>
+        <div class="c-icon"><svg class="ui-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M38 19C38 30 24 43 24 43S10 30 10 19A14 14 0 0 1 38 19Z"/><circle cx="24" cy="19" r="5"/></svg></div>
         <h4>所在城市</h4>
         <p>福建 · 福州<br>三明学院 · 物联网工程(在读)</p>
       </div>
@@ -852,7 +927,8 @@ body:has(.panel.active:not([data-panel="home"])) .iot-resume-background svg {opa
 
   function applyTheme(theme, save) {
     root.setAttribute('data-theme', theme);
-    themeBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+    themeBtn.innerHTML = theme === 'dark' ? "<svg class=\"ui-icon\" viewBox=\"0 0 48 48\" aria-hidden=\"true\" focusable=\"false\"><circle cx=\"24\" cy=\"24\" r=\"9\"/><path d=\"M24 3V8M24 40V45M3 24H8M40 24H45M9 9L13 13M35 35L39 39M9 39L13 35M35 13L39 9\"/></svg>" : "<svg class=\"ui-icon\" viewBox=\"0 0 48 48\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M27 7A17 17 0 1 0 41 30A15 15 0 0 1 27 7Z\"/></svg>";
+    themeBtn.setAttribute('aria-label', theme === 'dark' ? '切换浅色主题' : '切换深色主题');
     if (save) {
       try { localStorage.setItem('resume-theme', theme); } catch (e) {}
     }
@@ -875,41 +951,141 @@ body:has(.panel.active:not([data-panel="home"])) .iot-resume-background svg {opa
     if (!saved) applyTheme(e.matches ? 'dark' : 'light', false);
   });
 
-  /* ---------- Tabs 切换 ---------- */
-  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
-  var panels = Array.prototype.slice.call(document.querySelectorAll('.panel'));
+  /* Shared controller for tabs, deep links, keyboard navigation and swipes. */
+  var tabs = Array.from(document.querySelectorAll('.tab'));
+  var panels = Array.from(document.querySelectorAll('.panel'));
+  var tabStrip = document.getElementById('tabs');
+  var main = document.querySelector('main.wrap');
+  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var narrow = window.matchMedia('(max-width: 900px)');
+  var positions = new Map();
+  var activeName = document.querySelector('.panel.active').dataset.panel;
+  var gesture = null;
+  var settling = false;
+  var indicator = document.createElement('span');
+  indicator.className = 'tab-indicator';
+  indicator.setAttribute('aria-hidden', 'true');
+  tabStrip.prepend(indicator);
+  var status = document.getElementById('pageAnnouncement');
 
-  function switchTab(name) {
-    tabs.forEach(function (t) {
+  function updateIndicator() {
+    var tab = tabs.find(t => t.dataset.tab === activeName);
+    if (!tab) return;
+    indicator.style.width = tab.offsetWidth + 'px';
+    indicator.style.transform = 'translateX(' + tab.offsetLeft + 'px)';
+    var left = tab.offsetLeft, right = left + tab.offsetWidth;
+    if (left < tabStrip.scrollLeft || right > tabStrip.scrollLeft + tabStrip.clientWidth) {
+      tabStrip.scrollTo({left: Math.max(0, left - (tabStrip.clientWidth - tab.offsetWidth) / 2), behavior: 'auto'});
+    }
+  }
+  function cleanupGesture() {
+    if (!gesture) return;
+    [gesture.current, gesture.next].filter(Boolean).forEach(function(p) {
+      p.classList.remove('swipe-peek', 'swipe-current');
+      ['transform','width','left','top','will-change'].forEach(k => p.style.removeProperty(k));
+    });
+    main.classList.remove('swipe-running');
+    gesture = null;
+  }
+  function switchTab(name, options) {
+    options = options || {};
+    var index = panels.findIndex(p => p.dataset.panel === name);
+    if (index < 0 || settling) return;
+    cleanupGesture();
+    if (name !== activeName) positions.set(activeName, window.scrollY);
+    activeName = name;
+    tabs.forEach(function(t) {
       var on = t.dataset.tab === name;
       t.classList.toggle('active', on);
-      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.setAttribute('aria-selected', String(on));
+      t.tabIndex = on ? 0 : -1;
     });
-    panels.forEach(function (p) {
+    panels.forEach(function(p) {
       var on = p.dataset.panel === name;
       p.classList.toggle('active', on);
-      if (on) {
-        /* 触发技能条动画 */
-        p.querySelectorAll('.bar-fill').forEach(function (f) {
-          var w = f.dataset.w || '0%';
-          f.style.transition = 'none';
-          f.style.width = '0';
-          void f.offsetWidth; /* 强制回流以重启动画 */
-          f.style.transition = '';
-          f.style.width = w; /* 内联宽度,直接生效并触发过渡动画 */
-        });
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
+      p.setAttribute('aria-hidden', String(!on));
+      p.inert = !on;
     });
-    if (history.replaceState) history.replaceState(null, '', '#' + name);
+    document.querySelectorAll('.page-status-count').forEach(n => n.textContent = (index + 1) + ' / ' + panels.length);
+    if (status) status.textContent = tabs[index].textContent.trim() + '，第 ' + (index + 1) + ' 页，共 ' + panels.length + ' 页';
+    if (history.replaceState && !options.fromHash) history.replaceState(null, '', '#' + name);
+    if (!options.initial) window.scrollTo({top: positions.get(name) || 0, behavior:'instant'});
+    requestAnimationFrame(updateIndicator);
   }
   window.switchTab = switchTab;
-  tabs.forEach(function (t) { t.addEventListener('click', function () { switchTab(t.dataset.tab); }); });
+  tabs.forEach(function(t) {
+    t.addEventListener('click', () => switchTab(t.dataset.tab));
+    t.addEventListener('keydown', function(e) {
+      var index = tabs.indexOf(t), next;
+      if (e.key === 'ArrowRight') next = (index + 1) % tabs.length;
+      else if (e.key === 'ArrowLeft') next = (index - 1 + tabs.length) % tabs.length;
+      else if (e.key === 'Home') next = 0;
+      else if (e.key === 'End') next = tabs.length - 1;
+      else return;
+      e.preventDefault(); switchTab(tabs[next].dataset.tab); tabs[next].focus({preventScroll:true});
+    });
+  });
+  window.addEventListener('hashchange', () => switchTab(location.hash.slice(1), {fromHash:true}));
+  window.addEventListener('resize', function() { if (!settling) cleanupGesture(); updateIndicator(); });
+  if (document.fonts) document.fonts.ready.then(updateIndicator);
 
-  /* 初始 tab(支持 #skills 等深链) */
-  var initial = location.hash.replace('#', '');
-  if (initial === 'dark') initial = '';
-  if (panels.some(function (p) { return p.dataset.panel === initial; })) switchTab(initial);
+  main.addEventListener('pointerdown', function(e) {
+    if (!narrow.matches || settling || gesture || !e.isPrimary || e.button !== 0 || document.querySelector('.modal.active')) return;
+    if (e.clientX < 24 || e.clientX > innerWidth - 24) return;
+    if (e.target.closest('a,button,input,textarea,select,video,[contenteditable],.pills,.gallery-stage,[data-no-swipe]')) return;
+    var current = panels.find(p => p.dataset.panel === activeName);
+    gesture = {id:e.pointerId,x:e.clientX,y:e.clientY,time:e.timeStamp,current:current,index:panels.indexOf(current),dx:0,locked:false,next:null,direction:0};
+  });
+  main.addEventListener('pointermove', function(e) {
+    var g = gesture;
+    if (!g || g.id !== e.pointerId || settling) return;
+    var dx = e.clientX - g.x, dy = e.clientY - g.y;
+    if (!g.locked) {
+      if (Math.abs(dy) > 10 && Math.abs(dy) >= Math.abs(dx) * .85) {cleanupGesture();return;}
+      if (Math.abs(dx) < 12 || Math.abs(dx) <= Math.abs(dy) * 1.3) return;
+      g.locked = true;main.setPointerCapture(e.pointerId);g.current.classList.add('swipe-current');main.classList.add('swipe-running');
+      g.width = g.current.offsetWidth;
+    }
+    e.preventDefault();
+    var direction = dx < 0 ? 1 : -1;
+    if (g.direction !== direction) {
+      if(g.next){g.next.classList.remove('swipe-peek');['transform','width','left','top'].forEach(k=>g.next.style.removeProperty(k));}
+      g.direction = direction;g.next = panels[g.index + direction] || null;
+      if (g.next) {
+        g.next.classList.add('swipe-peek');
+        g.next.style.width = g.width + 'px';g.next.style.left = g.current.offsetLeft + 'px';
+        g.next.style.top = (g.current.offsetTop + window.scrollY - (positions.get(g.next.dataset.panel) || 0)) + 'px';
+      }
+    }
+    g.dx = g.next ? Math.max(-g.width,Math.min(g.width,dx)) : dx * .22;
+    if(!reducedMotion.matches){
+      g.current.style.transform = 'translateX(' + g.dx + 'px)';
+      if(g.next) g.next.style.transform = 'translateX(' + (g.dx + direction * (g.width + 22)) + 'px)';
+    }
+  }, {passive:false});
+  function finishSwipe(e, cancelled) {
+    var g = gesture;if (!g || g.id !== e.pointerId || settling) return;
+    if(!g.locked){cleanupGesture();return;}
+    if(main.hasPointerCapture(e.pointerId)) main.releasePointerCapture(e.pointerId);
+    var speed = Math.abs(g.dx) / Math.max(1,e.timeStamp - g.time);
+    var commit = !cancelled && g.next && (Math.abs(g.dx) > Math.min(90,g.width*.22) || (Math.abs(g.dx)>28 && speed>.45));
+    var name = commit ? g.next.dataset.panel : activeName;
+    var done = function(){settling=false;cleanupGesture();if(commit) switchTab(name);};
+    if(reducedMotion.matches){done();return;}
+    settling = true;
+    var distance = g.width + 22;
+    var settings = {duration:commit?270:320,easing:commit?'cubic-bezier(.22,.8,.25,1)':'cubic-bezier(.2,.9,.3,1.06)'};
+    var animations = [g.current.animate([{transform:g.current.style.transform},{transform:'translateX('+(commit?-g.direction*distance:0)+'px)'}],settings)];
+    if(g.next) animations.push(g.next.animate([{transform:g.next.style.transform},{transform:'translateX('+(commit?0:g.direction*distance)+'px)'}],settings));
+    Promise.all(animations.map(a=>a.finished.catch(()=>{}))).then(done);
+  }
+  main.addEventListener('pointerup', e=>finishSwipe(e,false));
+  main.addEventListener('pointercancel', e=>finishSwipe(e,true));
+  main.addEventListener('lostpointercapture', function(e){if(gesture&&!settling) finishSwipe(e,true);});
+  main.addEventListener('click', function(e){if(settling||(gesture&&gesture.locked)){e.preventDefault();e.stopPropagation();}},true);
+  var initial = location.hash.slice(1);
+  switchTab(panels.some(p=>p.dataset.panel===initial)?initial:'home',{initial:true});
+
 
   /* ---------- 复制邮箱 ---------- */
   function showToast(msg) {
@@ -1032,10 +1208,7 @@ body:has(.panel.active:not([data-panel="home"])) .iot-resume-background svg {opa
   /* ---------- 年份 ---------- */
   document.getElementById('year').textContent = String(new Date().getFullYear());
 
-  /* ---------- 首次进入技能面板时确保动画 ---------- */
-  if (document.querySelector('.panel.active[data-panel="skills"]')) {
-    switchTab('skills');
-  }
+
 })();
 </script>
 
