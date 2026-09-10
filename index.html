@@ -48,7 +48,7 @@
 
 /* ============ 基础 ============ */
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   background: var(--bg);
@@ -563,8 +563,9 @@ main.wrap {position:relative;}
  .brand small {display:none;}
  .nav-actions {margin-left:auto;gap:6px;}
  .nav-actions .btn {font-size:12px;padding:8px 12px;}
- .tabs {gap:0;padding:4px;}
- .tab {padding:8px 4px;gap:4px;font-size:11px;flex-direction:column;min-width:46px;}
+ .tabs {gap:0;padding:4px;overflow:hidden;}
+ .tab {padding:8px 2px;gap:4px;font-size:11px;flex:1 1 0;min-width:0;flex-direction:column;}
+ .tab span {white-space:nowrap;}
  .tab-indicator {top:4px;height:calc(100% - 8px);border-radius:18px;}
  .card {padding:20px;}
  .learning-top {gap:8px;}
@@ -990,7 +991,7 @@ main.wrap {position:relative;}
     if (!gesture) return;
     [gesture.current, gesture.next].filter(Boolean).forEach(function(p) {
       p.classList.remove('swipe-peek', 'swipe-current');
-      ['transform','width','left','top','will-change'].forEach(k => p.style.removeProperty(k));
+      ['transform','transition','width','left','top','will-change'].forEach(k => p.style.removeProperty(k));
     });
     main.classList.remove('swipe-running');
     gesture = null;
@@ -1037,26 +1038,31 @@ main.wrap {position:relative;}
   window.addEventListener('resize', function() { if (!settling) cleanupGesture(); updateIndicator(); });
   if (document.fonts) document.fonts.ready.then(updateIndicator);
 
-  main.addEventListener('pointerdown', function(e) {
-    if (!narrow.matches || settling || gesture || !e.isPrimary || e.button !== 0 || document.querySelector('.modal.active')) return;
-    if (e.clientX < 24 || e.clientX > innerWidth - 24) return;
-    if (e.target.closest('a,button,input,textarea,select,video,[contenteditable],.pills,.gallery-stage,[data-no-swipe]')) return;
+  var interactiveSelector = 'a,button,input,textarea,select,video,[contenteditable],.pills,.gallery-stage,[data-no-swipe]';
+  function mayStartGesture(target, x) {
+    if (!narrow.matches || settling || gesture || document.querySelector('.modal.active')) return false;
+    if (x < 18 || x > innerWidth - 18) return false;
+    return !(target && target.closest && target.closest(interactiveSelector));
+  }
+  function beginGesture(id, x, y, time, pointerId) {
     var current = panels.find(p => p.dataset.panel === activeName);
-    gesture = {id:e.pointerId,x:e.clientX,y:e.clientY,time:e.timeStamp,current:current,index:panels.indexOf(current),dx:0,locked:false,finishing:false,next:null,direction:0};
-  });
-  main.addEventListener('pointermove', function(e) {
+    gesture = {id:id,pointerId:pointerId,x:x,y:y,time:time,current:current,index:panels.indexOf(current),dx:0,locked:false,finishing:false,next:null,direction:0};
+  }
+  function moveGesture(id, x, y, event) {
     var g = gesture;
-    if (!g || g.id !== e.pointerId || settling) return;
-    var dx = e.clientX - g.x, dy = e.clientY - g.y;
+    if (!g || g.id !== id || settling || g.finishing) return;
+    var dx = x - g.x, dy = y - g.y;
     if (!g.locked) {
-      /* Real fingers rarely move in a perfectly straight line. Wait for a clear
-         vertical gesture, while allowing a slightly diagonal horizontal swipe. */
       if (Math.abs(dy) > 20 && Math.abs(dy) > Math.abs(dx) * 1.2) {cleanupGesture();return;}
       if (Math.abs(dx) < 10 || Math.abs(dx) <= Math.abs(dy) * 1.05) return;
-      g.locked = true;main.setPointerCapture(e.pointerId);g.current.classList.add('swipe-current');main.classList.add('swipe-running');
+      g.locked = true;
+      if (g.pointerId != null && main.setPointerCapture) {
+        try { main.setPointerCapture(g.pointerId); } catch (err) {}
+      }
+      g.current.classList.add('swipe-current');main.classList.add('swipe-running');
       g.width = g.current.offsetWidth;
     }
-    e.preventDefault();
+    if (event && event.cancelable) event.preventDefault();
     var direction = dx < 0 ? 1 : -1;
     if (g.direction !== direction) {
       if(g.next){g.next.classList.remove('swipe-peek');['transform','width','left','top'].forEach(k=>g.next.style.removeProperty(k));}
@@ -1072,27 +1078,60 @@ main.wrap {position:relative;}
       g.current.style.transform = 'translateX(' + g.dx + 'px)';
       if(g.next) g.next.style.transform = 'translateX(' + (g.dx + direction * (g.width + 22)) + 'px)';
     }
-  }, {passive:false});
-  function finishSwipe(e, cancelled) {
-    var g = gesture;if (!g || g.id !== e.pointerId || settling || g.finishing) return;
+  }
+  function finishSwipe(id, time, cancelled) {
+    var g = gesture;if (!g || g.id !== id || settling || g.finishing) return;
     if(!g.locked){cleanupGesture();return;}
     g.finishing = true;
-    if(main.hasPointerCapture(e.pointerId)) main.releasePointerCapture(e.pointerId);
-    var speed = Math.abs(g.dx) / Math.max(1,e.timeStamp - g.time);
+    if(g.pointerId != null && main.hasPointerCapture && main.hasPointerCapture(g.pointerId)) {
+      try { main.releasePointerCapture(g.pointerId); } catch (err) {}
+    }
+    var speed = Math.abs(g.dx) / Math.max(1,time - g.time);
     var commit = !cancelled && g.next && (Math.abs(g.dx) > Math.min(90,g.width*.22) || (Math.abs(g.dx)>28 && speed>.45));
     var name = commit ? g.next.dataset.panel : activeName;
-    var done = function(){settling=false;cleanupGesture();if(commit) switchTab(name);};
+    var completed = false, timer = 0;
+    var done = function(){if(completed)return;completed=true;clearTimeout(timer);settling=false;cleanupGesture();if(commit) switchTab(name);};
     if(reducedMotion.matches){done();return;}
     settling = true;
     var distance = g.width + 22;
-    var settings = {duration:commit?270:320,easing:commit?'cubic-bezier(.22,.8,.25,1)':'cubic-bezier(.2,.9,.3,1.06)'};
-    var animations = [g.current.animate([{transform:g.current.style.transform},{transform:'translateX('+(commit?-g.direction*distance:0)+'px)'}],settings)];
-    if(g.next) animations.push(g.next.animate([{transform:g.next.style.transform},{transform:'translateX('+(commit?0:g.direction*distance)+'px)'}],settings));
-    Promise.all(animations.map(a=>a.finished.catch(()=>{}))).then(done);
+    var duration = commit ? 260 : 280;
+    var easing = commit ? 'cubic-bezier(.22,.8,.25,1)' : 'cubic-bezier(.2,.9,.3,1.06)';
+    [g.current,g.next].filter(Boolean).forEach(function(panel){panel.style.transition='transform '+duration+'ms '+easing;});
+    g.current.addEventListener('transitionend', done, {once:true});
+    requestAnimationFrame(function(){
+      g.current.style.transform='translateX('+(commit?-g.direction*distance:0)+'px)';
+      if(g.next) g.next.style.transform='translateX('+(commit?0:g.direction*distance)+'px)';
+    });
+    /* Android WebViews can omit transitionend when a layer is interrupted.
+       Always release the UI state even when that browser callback is lost. */
+    timer = setTimeout(done, duration + 90);
   }
-  main.addEventListener('pointerup', e=>finishSwipe(e,false));
-  main.addEventListener('pointercancel', e=>finishSwipe(e,true));
-  main.addEventListener('lostpointercapture', function(e){if(gesture&&!gesture.finishing&&!settling) finishSwipe(e,true);});
+
+  main.addEventListener('pointerdown', function(e) {
+    if (e.pointerType === 'touch' || !e.isPrimary || e.button !== 0 || !mayStartGesture(e.target,e.clientX)) return;
+    beginGesture(e.pointerId,e.clientX,e.clientY,e.timeStamp,e.pointerId);
+  });
+  main.addEventListener('pointermove', function(e){if(e.pointerType!=='touch')moveGesture(e.pointerId,e.clientX,e.clientY,e);},{passive:false});
+  main.addEventListener('pointerup', function(e){if(e.pointerType!=='touch')finishSwipe(e.pointerId,e.timeStamp,false);});
+  main.addEventListener('pointercancel', function(e){if(e.pointerType!=='touch')finishSwipe(e.pointerId,e.timeStamp,true);});
+  main.addEventListener('lostpointercapture', function(e){if(gesture&&!gesture.finishing&&!settling)finishSwipe(e.pointerId,e.timeStamp,true);});
+
+  main.addEventListener('touchstart', function(e){
+    if(e.touches.length!==1)return;
+    var t=e.changedTouches[0];if(!mayStartGesture(e.target,t.clientX))return;
+    beginGesture('t'+t.identifier,t.clientX,t.clientY,e.timeStamp,null);
+  },{passive:true});
+  main.addEventListener('touchmove', function(e){
+    if(!gesture||gesture.pointerId!=null)return;
+    var t=Array.from(e.touches).find(function(x){return 't'+x.identifier===gesture.id;});
+    if(t)moveGesture(gesture.id,t.clientX,t.clientY,e);
+  },{passive:false});
+  main.addEventListener('touchend', function(e){
+    if(!gesture||gesture.pointerId!=null)return;
+    var t=Array.from(e.changedTouches).find(function(x){return 't'+x.identifier===gesture.id;});
+    if(t)finishSwipe(gesture.id,e.timeStamp,false);
+  },{passive:true});
+  main.addEventListener('touchcancel', function(e){if(gesture&&gesture.pointerId==null)finishSwipe(gesture.id,e.timeStamp,true);},{passive:true});
   main.addEventListener('click', function(e){if(settling||(gesture&&gesture.locked)){e.preventDefault();e.stopPropagation();}},true);
   var initial = location.hash.slice(1);
   switchTab(panels.some(p=>p.dataset.panel===initial)?initial:'home',{initial:true});
