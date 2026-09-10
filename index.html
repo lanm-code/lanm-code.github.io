@@ -539,8 +539,8 @@ a.contact-card:active,.btn:active,.icon-btn:active {transform:scale(.975);}
 .learning-note {margin-top:22px;padding:14px 16px;border-radius:14px;background:color-mix(in srgb,var(--brand2) 6%,var(--card));color:var(--muted);font-size:13px;line-height:1.8;}
 .page-status {display:none;}
 main.wrap {position:relative;}
-.panel.swipe-peek {display:block;position:absolute;visibility:visible;pointer-events:none;animation:none;}
-.panel.swipe-current {animation:none;position:relative;will-change:transform;}
+.panel.swipe-peek {display:block;position:absolute;visibility:visible;pointer-events:none;animation:none;will-change:transform;contain:paint;}
+.panel.swipe-current {animation:none;position:relative;will-change:transform;contain:paint;}
 .swipe-running .panel {transition:none;}
 .screen-reader-only {position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
 @media(max-width:900px){
@@ -583,7 +583,8 @@ main.wrap {position:relative;}
  .learning-item,.practice-item {break-inside:avoid;}
 }
 
-.swipe-running {user-select:none;-webkit-user-select:none;}
+.swipe-running {user-select:none;-webkit-user-select:none;cursor:grabbing;}
+@media(hover:hover) and (pointer:fine){main.wrap{cursor:grab;}main.wrap :is(a,button){cursor:pointer;}}
 
 </style>
 </head>
@@ -966,7 +967,6 @@ main.wrap {position:relative;}
   var tabStrip = document.getElementById('tabs');
   var main = document.querySelector('main.wrap');
   var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  var narrow = window.matchMedia('(max-width: 900px)');
   var positions = new Map();
   var activeName = document.querySelector('.panel.active').dataset.panel;
   var gesture = null;
@@ -989,6 +989,7 @@ main.wrap {position:relative;}
   }
   function cleanupGesture() {
     if (!gesture) return;
+    if (gesture.raf) cancelAnimationFrame(gesture.raf);
     [gesture.current, gesture.next].filter(Boolean).forEach(function(p) {
       p.classList.remove('swipe-peek', 'swipe-current');
       ['transform','transition','width','left','top','will-change'].forEach(k => p.style.removeProperty(k));
@@ -1038,23 +1039,32 @@ main.wrap {position:relative;}
   window.addEventListener('resize', function() { if (!settling) cleanupGesture(); updateIndicator(); });
   if (document.fonts) document.fonts.ready.then(updateIndicator);
 
-  var interactiveSelector = 'a,button,input,textarea,select,video,[contenteditable],.pills,.gallery-stage,[data-no-swipe]';
+  var interactiveSelector = 'a,button,input,textarea,select,video,[contenteditable],.gallery-stage,[data-no-swipe]';
   function mayStartGesture(target, x) {
-    if (!narrow.matches || settling || gesture || document.querySelector('.modal.active')) return false;
+    if (settling || gesture || document.querySelector('.modal.active')) return false;
     if (x < 18 || x > innerWidth - 18) return false;
     return !(target && target.closest && target.closest(interactiveSelector));
   }
   function beginGesture(id, x, y, time, pointerId) {
     var current = panels.find(p => p.dataset.panel === activeName);
-    gesture = {id:id,pointerId:pointerId,x:x,y:y,time:time,current:current,index:panels.indexOf(current),dx:0,locked:false,finishing:false,next:null,direction:0};
+    gesture = {id:id,pointerId:pointerId,x:x,y:y,time:time,current:current,index:panels.indexOf(current),dx:0,locked:false,finishing:false,next:null,direction:0,raf:0};
+  }
+  function paintGesture(g) {
+    if (!g || gesture !== g) return;
+    g.raf = 0;
+    g.current.style.transform = 'translate3d(' + g.dx + 'px,0,0)';
+    if(g.next) g.next.style.transform = 'translate3d(' + (g.dx + g.direction * (g.width + 22)) + 'px,0,0)';
+  }
+  function scheduleGesturePaint(g) {
+    if (!g.raf) g.raf = requestAnimationFrame(function(){paintGesture(g);});
   }
   function moveGesture(id, x, y, event) {
     var g = gesture;
     if (!g || g.id !== id || settling || g.finishing) return;
     var dx = x - g.x, dy = y - g.y;
     if (!g.locked) {
-      if (Math.abs(dy) > 20 && Math.abs(dy) > Math.abs(dx) * 1.2) {cleanupGesture();return;}
-      if (Math.abs(dx) < 10 || Math.abs(dx) <= Math.abs(dy) * 1.05) return;
+      if (Math.abs(dy) > 16 && Math.abs(dy) > Math.abs(dx) * 1.35) {cleanupGesture();return;}
+      if (Math.abs(dx) < 5 || Math.abs(dx) <= Math.abs(dy)) return;
       g.locked = true;
       if (g.pointerId != null && main.setPointerCapture) {
         try { main.setPointerCapture(g.pointerId); } catch (err) {}
@@ -1074,15 +1084,13 @@ main.wrap {position:relative;}
       }
     }
     g.dx = g.next ? Math.max(-g.width,Math.min(g.width,dx)) : dx * .22;
-    if(!reducedMotion.matches){
-      g.current.style.transform = 'translateX(' + g.dx + 'px)';
-      if(g.next) g.next.style.transform = 'translateX(' + (g.dx + direction * (g.width + 22)) + 'px)';
-    }
+    if(!reducedMotion.matches) scheduleGesturePaint(g);
   }
   function finishSwipe(id, time, cancelled) {
     var g = gesture;if (!g || g.id !== id || settling || g.finishing) return;
     if(!g.locked){cleanupGesture();return;}
     g.finishing = true;
+    if(g.raf){cancelAnimationFrame(g.raf);g.raf=0;paintGesture(g);}
     if(g.pointerId != null && main.hasPointerCapture && main.hasPointerCapture(g.pointerId)) {
       try { main.releasePointerCapture(g.pointerId); } catch (err) {}
     }
@@ -1094,17 +1102,17 @@ main.wrap {position:relative;}
     if(reducedMotion.matches){done();return;}
     settling = true;
     var distance = g.width + 22;
-    var duration = commit ? 260 : 280;
+    var duration = commit ? 220 : 240;
     var easing = commit ? 'cubic-bezier(.22,.8,.25,1)' : 'cubic-bezier(.2,.9,.3,1.06)';
     [g.current,g.next].filter(Boolean).forEach(function(panel){panel.style.transition='transform '+duration+'ms '+easing;});
     g.current.addEventListener('transitionend', done, {once:true});
     requestAnimationFrame(function(){
-      g.current.style.transform='translateX('+(commit?-g.direction*distance:0)+'px)';
-      if(g.next) g.next.style.transform='translateX('+(commit?0:g.direction*distance)+'px)';
+      g.current.style.transform='translate3d('+(commit?-g.direction*distance:0)+'px,0,0)';
+      if(g.next) g.next.style.transform='translate3d('+(commit?0:g.direction*distance)+'px,0,0)';
     });
     /* Android WebViews can omit transitionend when a layer is interrupted.
        Always release the UI state even when that browser callback is lost. */
-    timer = setTimeout(done, duration + 90);
+    timer = setTimeout(done, duration + 70);
   }
 
   main.addEventListener('pointerdown', function(e) {
@@ -1132,6 +1140,21 @@ main.wrap {position:relative;}
     if(t)finishSwipe(gesture.id,e.timeStamp,false);
   },{passive:true});
   main.addEventListener('touchcancel', function(e){if(gesture&&gesture.pointerId==null)finishSwipe(gesture.id,e.timeStamp,true);},{passive:true});
+
+  var wheelTotal = 0, wheelLast = 0, wheelLockUntil = 0;
+  main.addEventListener('wheel', function(e){
+    if(document.querySelector('.modal.active') || settling || Math.abs(e.deltaX) <= Math.abs(e.deltaY) * 1.25) return;
+    var now = performance.now();
+    if(now < wheelLockUntil){if(e.cancelable)e.preventDefault();return;}
+    if(now - wheelLast > 180) wheelTotal = 0;
+    wheelLast = now; wheelTotal += e.deltaX;
+    if(e.cancelable)e.preventDefault();
+    if(Math.abs(wheelTotal) < 64) return;
+    var currentIndex = panels.findIndex(function(p){return p.dataset.panel === activeName;});
+    var nextIndex = currentIndex + (wheelTotal > 0 ? 1 : -1);
+    wheelTotal = 0; wheelLockUntil = now + 480;
+    if(panels[nextIndex]) switchTab(panels[nextIndex].dataset.panel);
+  },{passive:false});
   main.addEventListener('click', function(e){if(settling||(gesture&&gesture.locked)){e.preventDefault();e.stopPropagation();}},true);
   var initial = location.hash.slice(1);
   switchTab(panels.some(p=>p.dataset.panel===initial)?initial:'home',{initial:true});
