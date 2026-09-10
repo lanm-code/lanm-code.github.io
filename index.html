@@ -414,9 +414,15 @@ body { isolation:isolate; }
 
 /* Pointer-reactive light and depth, scoped to decorative background. */
 #iot-light-trail { position:absolute; inset:0; width:100%; height:100%; opacity:.7; }
-.iot-resume-background svg { transform:perspective(1000px) translate3d(var(--iot-x,0px),var(--iot-y,0px),0) rotateX(var(--iot-rx,0deg)) rotateY(var(--iot-ry,0deg)); transform-origin:50% 50%; }
+.iot-resume-background svg {
+ transform:perspective(1000px) translate3d(var(--iot-x,0px),var(--iot-y,0px),0) rotateX(calc(-1.25deg + var(--iot-rx,0deg))) rotateY(calc(-2.75deg + var(--iot-ry,0deg)));
+ transform-origin:50% 50%;transform-style:preserve-3d;backface-visibility:hidden;will-change:transform;
+}
 .iot-motion-paused .iot-resume-background svg * { animation-play-state:paused!important; }
-@media(prefers-reduced-motion:reduce) { #iot-light-trail { display:none; } .iot-resume-background svg { transform:none!important; } }
+@media(prefers-reduced-motion:reduce) {
+ #iot-light-trail { display:none; }
+ .iot-resume-background svg {transform:perspective(1000px) translate3d(0,0,0) rotateX(-1.25deg) rotateY(-2.75deg)!important;will-change:auto;}
+}
 /* Unified cool mineral palette; existing grids and spacing are retained. */
 :root {
  --bg:#f1f5f7; --bg-soft:#e6edf3; --card:#f8fbfd; --ink:#172c3e;
@@ -494,6 +500,11 @@ body:has(.panel.active:not([data-panel="home"])) .iot-resume-background svg {opa
  .iot-resume-background svg {width:700px;right:max(-140px,calc((100vw - 1120px)/2 - 180px));top:64px;}
 }
 @media(max-width:1099px){.iot-resume-background svg{width:580px;right:-175px;top:150px;}}
+@media(min-width:901px) and (max-width:1099px){
+ .hero{padding-right:220px;min-height:390px;gap:26px;}
+ .iot-resume-background svg{width:560px;right:-175px;top:92px;opacity:.64;}
+ [data-theme="dark"] .iot-resume-background svg{opacity:.62;}
+}
 @media(max-width:640px){.iot-resume-background svg{width:490px;right:-170px;top:175px;}}
 @media print{#iot-water-surface{display:none!important;}}
 
@@ -1292,10 +1303,13 @@ main.wrap {position:relative;}
  const canvas=document.getElementById('iot-light-trail');
  const ctx=canvas&&canvas.getContext('2d');
  if(!art||!ctx)return;
- const coarse=matchMedia('(max-width: 900px), (pointer: coarse)');
+ const compact=matchMedia('(max-width: 900px)');
+ const hasFinePointer=matchMedia('(any-hover: hover) and (any-pointer: fine)');
  /* The cursor trail is a desktop enhancement. Avoid an otherwise empty
-    full-screen 60fps canvas loop on phones and tablets. */
- if(coarse.matches){canvas.remove();return;}
+    full-screen 60fps canvas loop in compact mobile layouts. A touchscreen
+    laptop may report a coarse primary pointer while a mouse is also present,
+    so pointer type must not disable the desktop depth effect. */
+ if(compact.matches&&!hasFinePointer.matches){canvas.remove();return;}
  const ns='http://www.w3.org/2000/svg';
  const mask=art.querySelector('#circuit-brush');
  const reduce=matchMedia('(prefers-reduced-motion: reduce)');
@@ -1308,7 +1322,7 @@ main.wrap {position:relative;}
   points.push({x:e.clientX,y:e.clientY,t:now});if(points.length>45)points.shift();
   const matrix=art.getScreenCTM();if(!matrix)return;
   const p=new DOMPoint(e.clientX,e.clientY).matrixTransform(matrix.inverse());
-  if(p.x>135&&p.x<475&&p.y>135&&p.y<435&&innerWidth>=1100){
+  if(p.x>135&&p.x<475&&p.y>135&&p.y<435){
    const node=document.createElementNS(ns,'circle');node.setAttribute('cx',p.x);node.setAttribute('cy',p.y);node.setAttribute('r','67');node.setAttribute('fill','white');mask.appendChild(node);
    brushes.push({node,t:now});if(brushes.length>55)brushes.shift().node.remove();
   }
